@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
@@ -22,12 +24,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.qa.opencart.exceptions.ElementException;
 import com.qa.opencart.factory.DriverFactory;
+import com.qa.opencart.pages.LoginPage;
+
+import io.qameta.allure.Step;
 
 public class ElementUtil {
 
 	private WebDriver driver;
 	private Actions act;
 	private JavaScriptUtil jUtil;
+	private static final Logger log = LogManager.getLogger(ElementUtil.class);
 
 	public ElementUtil(WebDriver driver) {
 		this.driver = driver;
@@ -36,10 +42,14 @@ public class ElementUtil {
 	}
 
 	public void doSendKeys(By locator, String value) {
+		log.info("Entering the value : " + value + "into locator" + locator);
 		if (value == null) {
+			log.error("Value is " + value + "is null");
 			throw new ElementException("===value can not be null====");
 		}
-		getElement(locator).sendKeys(value);
+		WebElement ele = getElement(locator);
+		ele.clear();
+		ele.sendKeys(value);
 	}
 
 	public void doMultipleSendKeys(By locator, CharSequence... value) {
@@ -47,6 +57,7 @@ public class ElementUtil {
 	}
 
 	public void doClick(By locator) {
+		log.info("Clicking on the element using :" + locator);
 		getElement(locator).click();
 	}
 
@@ -62,6 +73,7 @@ public class ElementUtil {
 		}
 	}
 
+	@Step("Checking the element displayed : {0} in the page")
 	public boolean isElementDisplayed(By locator) {
 		try {
 			return getElement(locator).isDisplayed();
@@ -99,6 +111,7 @@ public class ElementUtil {
 
 	public WebElement getElement(By locator) {
 		WebElement element = driver.findElement(locator);
+		log.info("Element is found using :" + locator + "locator");
 		if (Boolean.parseBoolean(DriverFactory.highlightEle)) {
 			jUtil.flash(element);
 		}
@@ -311,6 +324,7 @@ public class ElementUtil {
 	 * @param timeout
 	 * @return
 	 */
+	@Step("Waiting for element presence within the timeout : {1}")
 	public WebElement waitForElementPresence(By locator, int timeout) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
 		WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -329,7 +343,9 @@ public class ElementUtil {
 	 * @param timeout
 	 * @return
 	 */
+	@Step("Waiting for element visible within the timeout : {1}")
 	public WebElement waitForElementVisible(By locator, int timeout) {
+		log.info("Waiting for the element visible using By locator : " + locator + "within the timeout :" + timeout);
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
 		WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
 		if (Boolean.parseBoolean(DriverFactory.highlightEle)) {
@@ -411,6 +427,7 @@ public class ElementUtil {
 		return driver.getTitle();
 	}
 
+	@Step("Waiting for page title with expected value : {0}")
 	public String waitForTitleIs(String expectedTitleValue, int timeout) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
 
@@ -423,6 +440,7 @@ public class ElementUtil {
 		return driver.getTitle();
 	}
 
+	@Step("Waiting for page url with expected value : {0}")
 	public String waitForURLContains(String fractionURLValue, int timeout) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
 
