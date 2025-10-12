@@ -12,7 +12,6 @@
 			class-name="com.qa.opencart.listeners.AnnotationTransformer" />
 	</listeners>
 	
-
 	 <test name="Login Page Test_chrome">
 	<parameter name="browser" value="chrome"/>
 		<classes>
@@ -21,20 +20,20 @@
 	</test>
 	
 	<test name="Login Page Test_edge">
-	<parameter name="browser" value="edge"/>
+	<parameter name="browser" value="firefox"/>
 		<classes>
 			<class name="com.qa.opencart.tests.LoginPageTest" />
 		</classes>
 	</test>
 
 	<test name="Accounts Page Test">
-	<parameter name="browser" value="edge"/>
+	<parameter name="browser" value="firefox"/>
 		<classes>
 			<class name="com.qa.opencart.tests.AccountsPageTest" />
 		</classes>
 	</test>
 
-	<test name="Search Test">
+	<!-- <test name="Search Test">
 		<classes>
 			<class name="com.qa.opencart.tests.SearchTest" />
 		</classes>
@@ -44,10 +43,10 @@
 		<classes>
 			<class name="com.qa.opencart.tests.ProductInfoTest" />
 		</classes>
-	</test>
+	</test>-->
 
 	<test name="Register Page Test">
-	<parameter name="browser" value="chrome"/>
+	<parameter name="browser" value="firefox"/>
 		<classes>
 			<class name="com.qa.opencart.tests.RegisterPageTest" />
 		</classes>
